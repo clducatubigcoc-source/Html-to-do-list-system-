@@ -1,0 +1,153 @@
+import java.util.*;
+
+public class TodoSystem {
+
+    static Scanner sc = new Scanner(System.in);
+    static ArrayList<String> tasks = new ArrayList<>();
+    static ArrayList<String> savedTitles = new ArrayList<>();
+    static ArrayList<ArrayList<String>> savedLists = new ArrayList<>();
+
+    public static void main(String[] args) {
+
+        while (true) {
+            System.out.println("\n=== TO-DO LIST SYSTEM ===\n");
+
+            System.out.println("1. Add Task");
+            System.out.println("2. View Current Tasks");
+            System.out.println("3. Mark Task as Done");
+            System.out.println("4. Edit Task");
+            System.out.println("5. Delete Task");
+            System.out.println("6. Save List with Title");
+            System.out.println("7. View Saved Lists");
+            System.out.println("8. Clear Current Tasks");
+            System.out.println("9. Load Saved List");
+            System.out.println("10. Exit");
+
+            System.out.print("\nChoose: ");
+            int choice = getValidNumber(1, 10);
+
+            switch (choice) {
+                case 1: addTask(); break;
+                case 2: viewTasks(); break;
+                case 3: markDone(); break;
+                case 4: editTask(); break;
+                case 5: deleteTask(); break;
+                case 6: saveList(); break;
+                case 7: viewSavedLists(); break;
+                case 8: clearTasks(); break;
+                case 9: loadSavedList(); break;
+                case 10:
+                    System.out.println("\nEXITING...");
+                    return;
+            }
+        }
+    }
+
+    // ✅ FINAL VALIDATION + AUTO CAPITALIZATION
+    static String getValidWord() {
+        while (true) {
+            String input = sc.nextLine().trim().toLowerCase();
+
+            if (input.isEmpty()) {
+                System.out.print("Invalid input! Try again: ");
+                continue;
+            }
+
+            if (!input.matches("[a-zA-Z ]+")) {
+                System.out.print("Invalid input! Try again: ");
+                continue;
+            }
+
+            if (input.length() < 3) {
+                System.out.print("Invalid input! Try again: ");
+                continue;
+            }
+
+            String[] words = input.split("\\s+");
+            boolean validWordFound = false;
+
+            for (String word : words) {
+
+                if (word.length() < 3) continue;
+
+                if (word.matches("(.)\\1{2,}")) continue;
+
+                if (word.length() >= 10) continue;
+
+                if (!word.matches(".*[aeiou].*")) continue;
+
+                validWordFound = true;
+            }
+
+            if (!validWordFound) {
+                System.out.print("Invalid input! Try again: ");
+                continue;
+            }
+
+            String[] bannedNames = {
+                "john", "maria", "jose", "anna", "mark",
+                "paul", "peter", "james", "kevin", "alex",
+                "daniel", "joshua", "michelle", "sarah", "kent"
+            };
+
+            for (String name : bannedNames) {
+                if (input.equals(name)) {
+                    System.out.print("Invalid input! Try again: ");
+                    continue;
+                }
+            }
+
+            // ✅ AUTO CAPITALIZATION
+            StringBuilder formatted = new StringBuilder();
+            for (String word : words) {
+                formatted.append(Character.toUpperCase(word.charAt(0)))
+                         .append(word.substring(1))
+                         .append(" ");
+            }
+
+            return formatted.toString().trim();
+        }
+    }
+
+    // ✅ NUMBER VALIDATION
+    static int getValidNumber(int min, int max) {
+        while (true) {
+            String input = sc.nextLine();
+            try {
+                int num = Integer.parseInt(input);
+                if (num >= min && num <= max) return num;
+                else System.out.print("Invalid choice! Try again: ");
+            } catch (Exception e) {
+                System.out.print("Invalid input! Try again: ");
+            }
+        }
+    }
+
+    // ✅ YES/NO VALIDATION
+    static String getYesNo() {
+        while (true) {
+            String input = sc.nextLine().trim().toLowerCase();
+            if (input.equals("yes") || input.equals("no")) return input;
+            else System.out.print("Invalid input! Enter yes or no: ");
+        }
+    }
+
+    // ✅ TASK INDEX VALIDATION
+    static int getValidTaskIndex() {
+        while (true) {
+            String input = sc.nextLine();
+            try {
+                int num = Integer.parseInt(input);
+                if (num >= 1 && num <= tasks.size()) return num;
+                else System.out.print("Invalid task number! Try again: ");
+            } catch (Exception e) {
+                System.out.print("Invalid input! Try again: ");
+            }
+        }
+    }
+
+    // ADD TASK
+    static void addTask() {
+        while (true) {
+            System.out.print("\nEnter task: ");
+            String task = getVal
